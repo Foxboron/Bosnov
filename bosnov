@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+set -e
+
+set -o allexport
+source /etc/bosnov.conf
+set +o allexport
+
+TRANSACTION=$1
+SNAPPER=$(snapper -c $SNAPPER_CONFIG list | grep $TRANSACTION | tail -n 1)
+SNAPPER_ID=$(echo $SNAPPER | awk -F\| '{print $2}' | tr -d ' ')
+DATE=$(echo $SNAPPER | awk -F\| '{print $4}')
+
+cat >/boot/loader/entries/arch-$SNAPPER_ID.conf <<EOL
+title	$TRANSACTION - $SNAPPER_ID - $DATE
+linux	/vmlinuz-linux
+initrd	/initramfs-linux.img
+options	$OPTIONS rootflags=subvol=$SNAPPER_SUBVOL/$SNAPPER_ID/snapshot
+EOL

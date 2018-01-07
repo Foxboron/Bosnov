@@ -1,0 +1,20 @@
+#!/bin/bash
+
+run_hook() {
+    if [ "${bosnov}" ]; then
+        # Mount the real root to /lroot
+        "$mount_handler" /lroot;
+
+        # Create a tmpfs root. This keeps our filesystem modifications
+        mem_size=$(free -m | awk '/Mem/ {print int($2)}');
+        mount -t tmpfs troot -o size=${mem_size}M /troot
+
+        mkdir /troot/upper;
+        mkdir /troot/work;
+
+        btrfs_boot_mount() {
+          mount -t overlay overlay -o lowerdir=/lroot,upperdir=/troot/upper,workdir=/troot/work "$1"
+        }
+        mount_handler=btrfs_boot_mount
+    fi
+}

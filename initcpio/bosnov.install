@@ -1,0 +1,16 @@
+#!/bin/bash
+
+build() {
+  add_dir /lroot
+  add_dir /troot
+  add_module btrfs
+  add_module overlay
+  add_binary free
+  add_runscript
+}
+
+help() {
+  cat <<HELPEOF
+  Bosnov enables you to snapper snapshots in a non-persistent manner
+HELPEOF
+}
