@@ -3,9 +3,9 @@ Operation = Upgrade
 Operation = Install
 Operation = Remove
 Type = Package
-Target = linux
+Target = *
 
 [Action]
-Description = Backing up post...
+Description = Creating boot entry...
 When = PostTransaction
-Exec = /usr/bin/bosnov post
+Exec = /usr/bin/bosnov
